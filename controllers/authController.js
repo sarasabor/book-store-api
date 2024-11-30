@@ -1,6 +1,6 @@
 import User from "../models/User.js";
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 //* Function To Handle Errors
 const errorsFunction = (err) => {
