@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import validator from 'validator';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 const { isEmail } = validator;
 
 const Schema = mongoose.Schema;

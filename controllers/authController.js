@@ -1,6 +1,6 @@
 import User from "../models/User.js";
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 
 //* Function To Handle Errors
 const errorsFunction = (err) => {
@@ -41,7 +41,7 @@ export const signUpPost = async(req, res) => {
     try {
         //* Communication with Database 
         const newUser = await User({email, password });
-        if(!newUser) return res.status(404).json({message: 'Invalid Information'});
+        if(!newUser) return res.status(401).json({message: 'Invalid Information'});
 
         await newUser.save(); //* Saving The User to The Database
         
@@ -50,12 +50,12 @@ export const signUpPost = async(req, res) => {
         
         //* register it in cookies
        //* install cookie-parser and declare it as middleware ex: in this case it's declared in server.js 
-        res.cookie('jwt', token);
+        // res.cookie('jwt', token);
         
-        res.status(201).json({ message: 'User Registered Successfully', redirect: '/login', token});
+        // res.status(201).json({ message: 'User Registered Successfully', redirect: '/login', token});
+        res.status(200).json({ email, token});
     } catch (error) {
         const errors = errorsFunction(error); //* Returns Errors
-        console.log(errors);
         res.status(500).send(errors);
     }
 }
@@ -77,9 +77,10 @@ export const loginPost = async (req, res) => {
         const token = jwt.sign({user: user._id}, process.env.SECRET_KEY, { expiresIn: '1h'});
 
         //* register Cookie As WEll
-        res.cookie('jwt', token, { maxAge: 1000 * 60 * 60 });
+        // res.cookie('jwt', token, { maxAge: 1000 * 60 * 60 });
 
-        res.status(200).json({user: user._id, redirect: '/', token});
+        // res.status(200).json({user: user._id, redirect: '/', token});
+        res.status(200).json({ email, token});
     }catch(error) {
         const errors = errorsFunction(error);
         res.status(500).send(errors);
