@@ -4,6 +4,9 @@ import protect from '../middlewares/auth.js';
 
 const router = express.Router();
 
+//* This is a middleware to protect all routes 
+router.use(protect);
+
 // router.get('/', protect, getAllBooks);
 router.get('/', getAllBooks);
 router.post('/upload-book', addBook);

@@ -53,7 +53,7 @@ export const signUpPost = async(req, res) => {
         // res.cookie('jwt', token);
         
         // res.status(201).json({ message: 'User Registered Successfully', redirect: '/login', token});
-        res.status(200).json({ email, token});
+        res.status(200).json({ email, token, redirect: '/login'});
     } catch (error) {
         const errors = errorsFunction(error); //* Returns Errors
         res.status(500).send(errors);
@@ -80,7 +80,7 @@ export const loginPost = async (req, res) => {
         // res.cookie('jwt', token, { maxAge: 1000 * 60 * 60 });
 
         // res.status(200).json({user: user._id, redirect: '/', token});
-        res.status(200).json({ email, token});
+        res.status(200).json({ email, token, redirect: '/'});
     }catch(error) {
         const errors = errorsFunction(error);
         res.status(500).send(errors);

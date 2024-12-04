@@ -1,18 +1,21 @@
 import jwt from 'jsonwebtoken';
 
 const protect = (req, res, next) => {
-    const token = req.cookies.jwt;
+    const { authorization } = req.headers;
+    console.log(authorization);
 
-    if(!token) {
-        return res.status(401).json({ message: 'Token Not Found'});
-    }
+    if(!authorization) return res.status(404).json({message: 'Authorization Token is Required'});
+
+    const token = authorization.split(' ')[1];
+    console.log(token)
 
     try {
         const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
         req.user = decodedToken;
         next();
+       
     } catch (error) {
-        res.status(401).json({ message: 'Token Not Found'});
+        res.status(401).json({error: 'Request Failed'});
     }
 }
 
