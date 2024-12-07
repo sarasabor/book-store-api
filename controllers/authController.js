@@ -1,19 +1,30 @@
 import User from "../models/User.js";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import validator from "validator";
+
+const { isEmail, isStrongPassword } = validator;
 
 //* Function To Handle Errors
 const errorsFunction = (err) => {
     let errors = { email: '', password: ''}
 
-    //* Incorrect Email
-    if(err.message === 'Incorrect Email') {
-        errors.email = 'This Email is Already Registered';
-    }
-
-    //* Incorrect Password
-    if(err.message === 'Incorrect Password') {
-        errors.password = 'This password is incorrect';
+    switch(err.message) {
+        case 'All Fields Are Required': 
+            errors.email = 'All Fields Are Required';
+            break;
+        case 'Password Not Strong' : 
+            errors.password = 'Please Enter A Strong Password';
+            break;
+        case 'Email is Already in Use' : 
+            errors.email = 'Email is Already in Use';
+            break;
+        case 'Incorrect Email' : 
+            errors.email = 'Incorrect Email';
+            break;
+        case 'Incorrect Password' : 
+            errors.password = 'This password is incorrect';
+            break;
     }
 
     //* if Data is Duplicated
@@ -38,7 +49,25 @@ const errorsFunction = (err) => {
 export const signUpPost = async(req, res) => {
     const { email, password } = req.body;
 
+
     try {
+        
+            if(!email || !password) {
+                throw new Error('All Fields Are Required');
+            }
+            if(!isEmail(email)) {
+                throw new Error('Email Not Valid');
+            }
+
+            if(!isStrongPassword(password)) {
+                throw new Error('Password Not Strong');
+            }
+
+            const emailExists = User.find({email});
+
+            if(emailExists) {
+                throw new Error('Email is Already in Use');
+            }
         //* Communication with Database 
         const newUser = await User({email, password });
         if(!newUser) return res.status(401).json({message: 'Invalid Information'});
@@ -64,6 +93,11 @@ export const loginPost = async (req, res) => {
     const { email, password } = req.body;
 
     try{
+
+        if(!email || !password) {
+            throw new Error('All Fields Are Required');
+        }
+
         const user = await User.findOne({email});
         if(!user) {
             throw new Error("Incorrect Email");
@@ -83,7 +117,7 @@ export const loginPost = async (req, res) => {
         res.status(200).json({ email, token, redirect: '/'});
     }catch(error) {
         const errors = errorsFunction(error);
-        res.status(500).send(errors);
+        res.status(500).json(errors);
     }
 
 }
