@@ -27,7 +27,7 @@ export const apiContact = async (req, res) => {
 
         await contact.save();
 
-        res.status(200).json({ messager: 'Form Submitted successfully'});
+        res.status(200).json({ message: 'Form Submitted successfully'});
         
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error', error});
