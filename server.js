@@ -16,11 +16,26 @@ const app = express();
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+// Configuration CORS dynamique selon l'environnement
+const allowedOrigins = process.env.NODE_ENV === 'production' 
+    ? ['https://book-store-b1dk.onrender.com']
+    : ['http://localhost:3000', 'http://127.0.0.1:3000'];
+
 app.use(cors({
-    origin: 'https://book-store-b1dk.onrender.com',
-    // origin: 'http://localhost:3000',
+    origin: function (origin, callback) {
+        // Autoriser les requêtes sans origin (mobile apps, postman, etc.)
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            console.log('CORS blocked origin:', origin);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true, //* to let the cookies work,
-    allowedHeaders: ['Authorization', 'Content-Type']
+    allowedHeaders: ['Authorization', 'Content-Type'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }));
 
 //* MIDDLEWARE FOR ROUTING 
