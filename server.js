@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 // Configuration CORS dynamique selon l'environnement
 const allowedOrigins = process.env.NODE_ENV === 'production' 
-    ? ['https://book-store-b1dk.onrender.com']
+    ? [process.env.FRONTEND_URL || 'https://your-vercel-app.vercel.app']
     : ['http://localhost:3000', 'http://127.0.0.1:3000'];
 
 app.use(cors({
