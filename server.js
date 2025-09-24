@@ -58,6 +58,15 @@ mongoose.connect(databaseUrl)
         console.log(error);
     });
 
+// Route de test pour vérifier que l'API fonctionne
+app.get('/', (req, res) => {
+    res.json({ 
+        message: 'Book Store API is running successfully!',
+        status: 'OK',
+        timestamp: new Date().toISOString()
+    });
+});
+
 app.get('/profile', protect, (req, res) => {
     res.json({ message: 'Hello User Your id is' + req.user});
 })
