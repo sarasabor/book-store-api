@@ -4,15 +4,14 @@ import protect from '../middlewares/auth.js';
 
 const router = express.Router();
 
-//* This is a middleware to protect all routes 
-router.use(protect);
-
-// router.get('/', protect, getAllBooks);
+//* Public routes - no authentication required for reading books
 router.get('/', getAllBooks);
-router.post('/upload-book', addBook);
 router.get('/:id', getBookById);
-router.delete('/:id', deleteBook);
-router.put('/update/:id', updateBook);
 router.get('/genre/:genre', getBookByGenre);
+
+//* Protected routes - authentication required for modifying books
+router.post('/upload-book', protect, addBook);
+router.delete('/:id', protect, deleteBook);
+router.put('/update/:id', protect, updateBook);
 
 export default router;
