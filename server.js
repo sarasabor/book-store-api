@@ -18,7 +18,11 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 // Configuration CORS dynamique selon l'environnement
 const allowedOrigins = process.env.NODE_ENV === 'production' 
-    ? [process.env.FRONTEND_URL || 'https://book-store-liard-chi.vercel.app']
+    ? [
+        process.env.FRONTEND_URL || 'https://book-store-liard-chi.vercel.app',
+        'https://book-store-ogcmi4tsw-sarasabors-projects.vercel.app',
+        'https://book-store-liard-chi.vercel.app'
+      ]
     : ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002', 'http://127.0.0.1:3000', 'http://127.0.0.1:3001', 'http://127.0.0.1:3002'];
 
 app.use(cors({
