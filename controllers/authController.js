@@ -63,13 +63,13 @@ export const signUpPost = async(req, res) => {
                 throw new Error('Password Not Strong');
             }
 
-            const emailExists = User.find({email});
+            const emailExists = await User.findOne({email});
 
             if(emailExists) {
                 throw new Error('Email is Already in Use');
             }
         //* Communication with Database 
-        const newUser = await User({email, password });
+        const newUser = new User({email, password });
         if(!newUser) return res.status(401).json({message: 'Invalid Information'});
 
         await newUser.save(); //* Saving The User to The Database
