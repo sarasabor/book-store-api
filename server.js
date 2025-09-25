@@ -30,6 +30,12 @@ app.use(cors({
         // Autoriser les requêtes sans origin (mobile apps, postman, etc.)
         if (!origin) return callback(null, true);
         
+        // Autoriser toutes les URLs Vercel pour ce projet
+        if (origin && origin.includes('sarasabors-projects.vercel.app')) {
+            callback(null, true);
+            return;
+        }
+        
         if (allowedOrigins.indexOf(origin) !== -1) {
             callback(null, true);
         } else {
