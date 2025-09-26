@@ -31,7 +31,7 @@ app.use(cors({
         if (!origin) return callback(null, true);
         
         // Autoriser toutes les URLs Vercel pour ce projet
-        if (origin && origin.includes('sarasabors-projects.vercel.app')) {
+        if (origin && (origin.includes('sarasabors-projects.vercel.app') || origin.includes('book-store-liard-chi.vercel.app'))) {
             callback(null, true);
             return;
         }
