@@ -6,7 +6,7 @@ dotenv.config();
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const apiContact = async (req, res) => {
-    const { name, email, message } = req.body;
+    const { name, email, subject, message } = req.body;
 
     try {
 
@@ -14,16 +14,17 @@ export const apiContact = async (req, res) => {
             from: 'Contact Form <onboarding@resend.dev>',
             to: 'saborsara.wad@gmail.com',
             replyTo: email,
-            subject: 'New Contact Form Submission',
+            subject: subject || 'New Contact Form Submission',
             html: `
                 <p><strong>Name: </strong>${name}</p>
                 <p><strong>Email: </strong>${email}</p>
+                <p><strong>Subject: </strong>${subject}</p>
                 <p><strong>Message: </strong>${message}</p>
             `,
           });
 
         //* Save Data To Database;
-        const contact = new Contact({ name, email, message });
+        const contact = new Contact({ name, email, subject, message });
 
         await contact.save();
 
